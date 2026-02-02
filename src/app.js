@@ -13,5 +13,14 @@ app.use(urlencoded({
 }))
 app.use(express.static("public"))
 app.use(cookieParser())
+
+//routes import
+import userRouter from "./routes/user.routes.js"
+
+//routes declaration
+app.use("/api/v1/users",userRouter)
+
+
+
 export {app}
 //ab kyuki db wala code hamara async hai to ye promise bhi return karta hai to connect hone ke baad ham .then .catch laga sakte hai
