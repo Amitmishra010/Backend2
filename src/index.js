@@ -1,5 +1,6 @@
 import dotenv from "dotenv"
 import connectDb from "./db/index.js"
+import { app } from "./app.js"
 
 /*2nd approach
 ham alag se file le db folder me ya connection folder me wahan sara code likhe wahan se function export karaye
