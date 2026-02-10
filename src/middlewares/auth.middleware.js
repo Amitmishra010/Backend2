@@ -1,9 +1,9 @@
 //ye middleware sirf verify karega ki user hai ya nahi hai
 
-import { ApiErrors } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
+import { ApiErrors } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.model";
+import { User } from "../models/user.model.js";
 
 export const verifyJWT=asyncHandler(async (req,res,next)=>{
 //ab token lenge kaise->req se kyuki iske paas cookies ka access hai
