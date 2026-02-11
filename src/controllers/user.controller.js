@@ -216,9 +216,117 @@ try {
 
 })
 
+const changeCurrentPassword=asyncHandler(async(req,res)=>{
+    const {oldPassword,newPassword}=req.body
+    //thinking->1. ab hame ek user chahiye hoga jiski field me jake ham password verify karwa paye
+    //and if wo apna password change kar pa raha hai means wo logged in hai aur ye possible ho paya auth middleware laga hone ki wajah se
+    //if middleware then req.user me user available hai
+    //and wahan se mai user id nikal sakta hu
+    const user=await User.findById(req.user?._id);
+    //ab is user me password and sari details ja rahi hai and password check karne ke liye hamne user models me methods banaye the
+    const isPasswordCorrect=await user.isPasswordCorrect(oldPassword)
+    if(!isPasswordCorrect){
+        throw new ApiErrors(400,"invalid password")
+    }
+    user.password=newPassword //abhi hamne ye object me set kara hai save nahi kara hai to save karne par hamare jo hook hai pre wo call hoga
+    await user.save({validateBeforeSave:false})
+    // ab response bhej denge
+    return res.status(200)
+    .json(new ApiResponse(
+        200,{},"password changed successfully"
+    ))
+
+})
+//current user ko get kar pao
+const getCurrentUser=asyncHandler(async(req,res)=>{
+    return res.status(200)
+    .json(new ApiResponse(200,req.user,"current user get successfully"))
+})
+
+const updateAccountDetails=asyncHandler(async(req,res)=>{
+    const {fullname,email}=req.body
+    if(!fullname || !email){
+        throw new ApiErrors(400,"fullname or email is required")
+    }
+    const user=await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            //yahan hame milte hai operators
+            $set:{
+                fullname:fullname,
+                email:email
+            }
+        },//ye object hota hai
+        {new:true}//isse update hone ke baad jo info hoti hai wo return hoti hai
+    ).select("-password")
+    //change password wale me to ek hi details thi so directly update karke save kar diya (jo ki hook tha)
+    //yahan find by id and update direct call karke update kara denge
+return res.status(200),
+json(
+    new ApiResponse(200,user,"account details updated successfully")
+)
+})
+//file update karte samay bas middlewares par dhyan dena padega 1st is multer and 
+const updateAvatar=asyncHandler(async(req,res)=>{
+     //avatar lenge req.file ke through ki multer middleware hame ye deta hai
+     const avatarLocalPath=req.file?.path
+     if(!avatarLocalPath){
+        throw new ApiErrors(400,"avatar is missing")
+     }
+     const avatar=await uploadOnCloudinary(avatarLocalPath)
+     if(!avatar.url){
+        throw new ApiErrors(400,"error while uploading avatar")
+     }
+     //ab update karenge object
+     const user=User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                avatar:avatar.url//sirf avatar nahi likhna kyuki wo pura object ho jayega upload
+            }
+        },
+        {new:true}
+     ).select("password")
+     return res.status(200)
+     .json(
+        new ApiResponse(200,user,"avatar updated successfully")
+     )
+})
+
+const updateCoverimage=asyncHandler(async(req,res)=>{
+     //avatar lenge req.file ke through ki multer middleware hame ye deta hai
+     const coverimageLocalPath=req.file?.path
+     if(!coverimageLocalPath){
+        throw new ApiErrors(400,"coverimage is missing")
+     }
+     const coverimage=await uploadOnCloudinary(coverimageLocalPath)
+     if(!coverimage.url){
+        throw new ApiErrors(400,"error while uploading coverimage")
+     }
+     //ab update karenge object
+     const user=User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set:{
+                coverimage:coverimage.url//sirf avatar nahi likhna kyuki wo pura object ho jayega upload
+            }
+        },
+        {new:true}
+     ).select("password")
+     return res.status(200)
+     .json(
+        new ApiResponse(200,user,"coverimage updated successfully")
+     )
+})
 export {
     registerUser,
     loginUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails,
+    updateAvatar,
+    updateCoverimage
+
 }
