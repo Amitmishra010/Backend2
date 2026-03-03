@@ -220,9 +220,30 @@ const updateVideo=asyncHandler(async(req,res)=>{
 
 
 })
-
+const deleteVideo=asyncHandler(async(req,res)=>{
+    //videoId chahiye
+    //check if video is in db or not
+    //owner validation
+    const {videoId}=req.params
+    if(!videoId){
+        throw new ApiErrors(400,"videoId is required ")
+    }
+    //use findoneand delete more efficient
+    const video=await Video.findOneAndDelete({
+        _id:videoId,
+        owner:req.user._id
+    });
+    if(!video){
+        throw new ApiErrors(400,"video not found or unauthorised")
+    }
+    await deleteFromCloudinary(video.videofile.public_id,"video")
+    await deleteFromCloudinary(video.thumbnail.public_id,"image")
+    return res.status(200)
+    .json(new ApiResponse(200,{},"video successfully deleted"))
+})
 export {
     uploadVideo,
     getvideosbyid,
-    updateVideo
+    updateVideo,
+    deleteVideo
 }
