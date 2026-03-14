@@ -102,15 +102,16 @@ const loginUser = asyncHandler(async (req, res) => {
     //if correct then user ke liye access and refresh token generate karne padenge
     //ab token ko bhej do(send cookies)
     //
+    // console.log(req.body)
     const { email, username, password } = req.body
-
+    // console.log("IN the loginUser")
     if (!username && !email) {
         throw new ApiErrors(404, "username or email is required")
     }
     const user = await User.findOne({
         $or: [{ username }, { email }]
     })
-    console.log("user mil gaya", user);
+    
     if (!user) {
         throw new ApiErrors(402, "user not found")
     }
@@ -120,9 +121,9 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiErrors(401, "password is incorrect")
     }
     //access and refresh token wala kaam itna common hai ki hame baar baar use karn pad sakta hai to isse ek seperate method me kar lete hai
-    console.log(user._id)
+    
     const {accessToken,refreshToken}=await generateAccessAndRefreshTokens(user._id)
-    console.log("aage")
+    
     //yahan pe user ke pass refresh token nahi hai to user ko update karna padega kyuki ye upar wala user hai db wala
     const loggedInUser=await User.findById(user._id)
     .select("-password -refreshToken")

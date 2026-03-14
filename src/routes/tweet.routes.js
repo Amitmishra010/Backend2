@@ -8,5 +8,5 @@ router.route("/:content").post(verifyJWT,createTweet)
 router.route("/:userId").get(verifyJWT,getUserTweets)
 router.route("/:tweetId").patch(verifyJWT,updateTweet)
 router.route("/:tweetId").delete(verifyJWT,deleteTweet)
-
+//working successfully
 export default router
