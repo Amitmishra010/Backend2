@@ -24,7 +24,7 @@ const addComment = asyncHandler(async (req, res) => {
     //get userid and validate it and is logged in
     const {videoId}=req.params
     const {content}=req.body
-    
+    console.log("add comment ke andar",videoId)
     if(!content){
         throw new ApiErrors(400,"content is required");
     }

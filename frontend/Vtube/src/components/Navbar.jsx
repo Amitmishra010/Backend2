@@ -35,9 +35,10 @@ function Navbar() {
           <>
         <Link to="/upload">Upload</Link>
 
-        <button onClick={handlelogout}>
+        <button className="hover:text-gray-300 cursor-pointer " onClick={handlelogout} >
           Logout
         </button>
+        
       </>
         ):(
         <>

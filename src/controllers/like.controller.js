@@ -14,7 +14,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     })
     if(isliked){
         await Like.findByIdAndDelete(isliked._id)
-        return res.status(200).json(new ApiResponse(200,{},"like removed successfully"))
+        return res.status(200).json({liked:false})
     }
     else{
         const likedVideo=await Like.create({
@@ -22,7 +22,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
             likedBy:req.user._id
         })
         return res.status(200)
-    .json(new ApiResponse(200,likedVideo,"liked successfully "))
+    .json({liked:true})
     }
     
 })

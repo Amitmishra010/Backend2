@@ -8,6 +8,7 @@ import Upload from "./pages/Upload"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 
+
 function App() {
   return (
   
@@ -28,6 +29,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+         
         </Routes>
       </div>
 

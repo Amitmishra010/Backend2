@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams,useNavigate } from "react-router-dom"
+
 import axios from "axios"
 
 function VideoPlayer() {
 
   const { videoId } = useParams()
-  const [video, setVideo] = useState(null)
+   const navigate=useNavigate()
+  const [video, setVideo] = useState(null);
+  const [liked,setLiked]=useState(false);
+  const [likesCount,setLikesCount]=useState(0);
+  const [comments,setComments]=useState("")
+  const [isSubscribed,setIsSubscribed]=useState(false)
+  const [subscriberCount,setSubscriberCount]=useState(0);
+
+
+
 
   useEffect(() => {
     console.log("useeffect running")
@@ -28,9 +38,14 @@ function VideoPlayer() {
     fetchVideo()
 
   }, [videoId])
-
-
-  if (!video) {
+  
+  useEffect(()=>{
+  if(video){
+    setIsSubscribed(video.owner.isSubscribed)
+    setSubscriberCount(video.owner.subscriberCount)
+  }
+},[video])
+if (!video) {
     return <p className="text-white p-6">Loading...</p>
   }
   function formatViews(views){
@@ -38,6 +53,75 @@ function VideoPlayer() {
   if(views >= 1000) return (views/1000).toFixed(1) + "K"
   return views
 }
+
+//like handler
+async function handleLikes() {
+  const token=localStorage.getItem("token")
+  if(!token){
+    alert("login karo")
+    return;
+  }
+  const res=await axios.post(`http://localhost:8000/api/v1/likes/${videoId}/like`,{},{
+    headers:{
+      Authorization:`Bearer ${token}`
+    }
+  })
+ console.log("yahan tak:",res.data)
+  if(res.data.liked){
+    setLiked(true)
+    setLikesCount(likesCount=>likesCount+1)
+  }
+  else{
+    setLiked(false)
+    setLikesCount(likesCount=>likesCount-1)
+  }
+}
+
+
+//comment handler
+async function handleComment() {
+  const token=localStorage.getItem("token")
+  console.log("ye raha token:",token)
+  if(!token){
+    alert("Please login first")
+    return;
+  }
+  await axios.post(`http://localhost:8000/api/v1/comments/${videoId}/add`,{content:comments},{
+    headers:{
+      Authorization:`Bearer ${token}`
+    }
+  })
+  
+  setComments("")
+  alert("comment added")
+  
+}
+
+//subscription handler
+async function handleSubscription() {
+  const token=localStorage.getItem("token")
+  if(!token){
+    alert("login first")
+   navigate("/login")
+
+    return;
+  }
+  const res=await axios.post(`http://localhost:8000/api/v1/subscriptions/${video.owner._id}`,{},{
+    headers:{
+      Authorization:`Bearer ${token}`
+    }
+  })
+  console.log("res ka data:",res.data)
+  if(res.data.message==="Subscribed successfully"){
+    setIsSubscribed(true)
+    setSubscriberCount(prev=>prev+1)
+  }
+  else{
+    setIsSubscribed(false)
+    setSubscriberCount(prev=>prev-1)
+  }
+}
+
   return (
     <div className="p-6">
 
@@ -54,6 +138,47 @@ function VideoPlayer() {
       <p className="text-gray-400 mt-2">
         {video.description}
       </p>
+      <button
+ onClick={handleLikes}
+ className={`px-4 py-2 rounded ${
+   liked ? "bg-blue-600" : "bg-gray-700"
+ }`}
+>
+ 👍 {likesCount}
+</button>
+
+<input
+ value={comments}
+ onChange={(e)=>setComments(e.target.value)}
+ placeholder="Add a comment"
+/>
+
+<button onClick={handleComment}>
+ Comment
+</button>
+
+
+{/*subscriber section*/}
+<div className="flex items-center gap-4 mt-4">
+
+<h3 className="text-white">
+  {video.owner.username}
+</h3>
+
+<p className="text-gray-400">
+  {subscriberCount} subscribers
+</p>
+
+<button
+ onClick={handleSubscription}
+ className={`px-4 py-2 rounded ${
+   isSubscribed ? "bg-gray-600" : "bg-red-600"
+ }`}
+>
+ {isSubscribed ? "Subscribed" : "Subscribe"}
+</button>
+
+</div>
 
     </div>
   )
