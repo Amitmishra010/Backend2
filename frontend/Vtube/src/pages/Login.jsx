@@ -25,7 +25,7 @@ function Login() {
       )
       console.log(res.data)
       localStorage.setItem("token", res.data.data.accessToken)
-
+      localStorage.setItem("user",JSON.stringify(res.data.data.user));
       alert("Login successful!")
       login(res.data.data.accessToken)
       navigate("/")

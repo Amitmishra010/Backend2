@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams,useNavigate } from "react-router-dom"
-
+import PlaylistModel from "../components/playlistModel.jsx"
 import axios from "axios"
 
 function VideoPlayer() {
@@ -13,7 +13,7 @@ function VideoPlayer() {
   const [comments,setComments]=useState("")
   const [isSubscribed,setIsSubscribed]=useState(false)
   const [subscriberCount,setSubscriberCount]=useState(0);
-
+  const [showPlaylistModel,setShowPlaylistModel]=useState(false);
 
 
 
@@ -26,8 +26,11 @@ function VideoPlayer() {
         const res = await axios.get(
           `http://localhost:8000/api/v1/videos/${videoId}`
         )
-        
+        const data=res.data.data
+        console.log("ye raha data:",data);
         setVideo(res.data.data)
+        setLiked(data.liked ||false);
+        setLikesCount(data.likesCount||0);
 
       } catch (error) {
         console.error(error)
@@ -147,6 +150,12 @@ async function handleSubscription() {
  👍 {likesCount}
 </button>
 
+<button
+  onClick={() => setShowPlaylistModel(true)}
+  className="px-4 py-2 bg-green-600 rounded ml-3"
+>
+  Save to Playlist
+</button>
 <input
  value={comments}
  onChange={(e)=>setComments(e.target.value)}
@@ -178,8 +187,15 @@ async function handleSubscription() {
  {isSubscribed ? "Subscribed" : "Subscribe"}
 </button>
 
+
 </div>
 
+    {showPlaylistModel && (
+  <PlaylistModel
+    videoId={video._id}
+    onClose={() => setShowPlaylistModel(false)}
+  />
+)}
     </div>
   )
 }

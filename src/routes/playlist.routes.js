@@ -2,13 +2,13 @@ import { addVideoToPlaylist, createPlaylist, deletePlaylist, getPlaylistById, ge
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { Router } from "express";
 const router=Router()
-router.route("/create-playlist").post(verifyJWT,createPlaylist)
-router.route("/:playlistId").post(verifyJWT,addVideoToPlaylist)
-router.route("/:playlistId/remove").patch(verifyJWT,removeVideoFromPlaylist)
+router.route("/").post(verifyJWT,createPlaylist)
+router.route("/:playlistId/add/:videoId").patch(verifyJWT,addVideoToPlaylist)
+router.route("/:playlistId/remove/:videoId").patch(verifyJWT,removeVideoFromPlaylist)
 router.route("/:playlistId").delete(verifyJWT,deletePlaylist)
 router.route("/:playlistId/update").patch(verifyJWT,updatePlaylist)
 router.route("/:playlistId").get(getPlaylistById)
-router.route("/:userId").get(verifyJWT,getUserPlaylists)
+router.route("/user/:userId").get(verifyJWT,getUserPlaylists)
 
 
 
