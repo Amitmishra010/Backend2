@@ -14,9 +14,7 @@ app.use(urlencoded({
 app.use(express.static("public"))
 app.use(cookieParser())
 
-app.get('/',(req,res)=>{
-    res.json({"Active":"true","message":"working fine"})
-})
+
 
 //routes import
 import userRouter from "./routes/user.routes.js"
