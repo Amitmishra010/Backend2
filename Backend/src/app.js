@@ -14,8 +14,8 @@ app.use(urlencoded({
 app.use(express.static("public"))
 app.use(cookieParser())
 
-app.get('/',()=>{
-    resizeBy.json({"Active":"true","message":"working fine"})
+app.get('/',(req,res)=>{
+    res.json({"Active":"true","message":"working fine"})
 })
 
 //routes import
