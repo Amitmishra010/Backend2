@@ -13,6 +13,7 @@ import Downloads from "./pages/Downloads"
 import History from "./pages/History"
 import LikedVideos from "./pages/LikedVideos"
 import YourVideos from "./pages/YourVideos"
+import Subscriptions from "./pages/Subscription"
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/history" element={<History />} />
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/your-videos" element={<YourVideos />} />
+          <Route path="/subscriptions"element={<Subscriptions/>}/>
         </Routes>
         </Layout>
       </div>
