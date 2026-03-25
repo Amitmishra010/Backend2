@@ -14,6 +14,10 @@ app.use(urlencoded({
 app.use(express.static("public"))
 app.use(cookieParser())
 
+app.get('/',()=>{
+    resizeBy.json({"Active":"true","message":"working fine"})
+})
+
 //routes import
 import userRouter from "./routes/user.routes.js"
 import videoRouter from "./routes/video.routes.js"
