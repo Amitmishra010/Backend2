@@ -16,9 +16,7 @@ const Sidebar = () => {
   return (
     <div className="w-60 bg-gray-900 text-white h-screen p-4">
 
-      <h2 className="text-xl font-bold mb-6">
-        VTUBE
-      </h2>
+      
 
       <div className="space-y-2">
         {menu.map((item) => (

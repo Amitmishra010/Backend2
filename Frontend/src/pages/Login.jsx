@@ -5,7 +5,7 @@ import { useContext } from "react"
 import { AuthContext } from "../context/authContext"
 
 function Login() {
-
+const API=import.meta.env.VITE_BACKEND_URL
   const navigate = useNavigate()
   const {login}=useContext(AuthContext)
   const [username, setUsername] = useState("")
@@ -17,7 +17,7 @@ function Login() {
     try {
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/users/login",
+        `${API}/users/login`,
         {
           username,
           password

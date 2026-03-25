@@ -4,7 +4,7 @@ import PlaylistModel from "../components/playlistModel.jsx"
 import axios from "axios"
 
 function VideoPlayer() {
-
+  const API=import.meta.env.VITE_BACKEND_URL
   const { videoId } = useParams()
    const navigate=useNavigate()
   const [video, setVideo] = useState(null);
@@ -24,7 +24,7 @@ function VideoPlayer() {
       try {
        console.log("inside try block")
         const res = await axios.get(
-          `http://localhost:8000/api/v1/videos/${videoId}`
+          `${API}/videos/${videoId}`
         )
         const data=res.data.data
         console.log("ye raha data:",data);
@@ -64,7 +64,7 @@ async function handleLikes() {
     alert("login karo")
     return;
   }
-  const res=await axios.post(`http://localhost:8000/api/v1/likes/${videoId}/like`,{},{
+  const res=await axios.post(`${API}/likes/${videoId}/like`,{},{
     headers:{
       Authorization:`Bearer ${token}`
     }
@@ -89,7 +89,7 @@ async function handleComment() {
     alert("Please login first")
     return;
   }
-  await axios.post(`http://localhost:8000/api/v1/comments/${videoId}/add`,{content:comments},{
+  await axios.post(`${API}/comments/${videoId}/add`,{content:comments},{
     headers:{
       Authorization:`Bearer ${token}`
     }
@@ -109,7 +109,7 @@ async function handleSubscription() {
 
     return;
   }
-  const res=await axios.post(`http://localhost:8000/api/v1/subscriptions/${video.owner._id}`,{},{
+  const res=await axios.post(`${API}/subscriptions/${video.owner._id}`,{},{
     headers:{
       Authorization:`Bearer ${token}`
     }

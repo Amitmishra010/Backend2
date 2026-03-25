@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Playlists = () => {
+  const API=import.meta.env.VITE_BACKEND_URL
     const navigate=useNavigate()
   const [playlists, setPlaylists] = useState([]);
 
@@ -15,7 +16,7 @@ const Playlists = () => {
 
   const fetchPlaylists = async () => {
     const res = await axios.get(
-      `http://localhost:8000/api/v1/playlists/user/${user._id}`,
+      `${API}/playlists/user/${user._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

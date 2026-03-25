@@ -1,7 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
 function Upload() {
-
+  const API=import.meta.env.VITE_BACKEND_URL
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [thumbnail, setThumbnail] = useState(null)
@@ -20,7 +20,7 @@ function Upload() {
 
     // later we will send this to backend
     try {
-        const res=await axios.post("http://localhost:8000/api/v1/videos/upload",formData,{headers:{
+        const res=await axios.post(`${API}/videos/upload`,formData,{headers:{
             Authorization:`Bearer ${token}`
          
             

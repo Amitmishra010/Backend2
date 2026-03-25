@@ -3,7 +3,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
 function Signup() {
-
+const API=import.meta.env.VITE_BACKEND_URL
   const navigate = useNavigate()
   const [fullname,setfullname]=useState("")
   const [username, setUsername] = useState("")
@@ -25,7 +25,7 @@ const [coverimage,setcoverimage]=useState(null)
     try {
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/users/register",
+        "${API}/users/register",
         formData,
         {
           headers: {

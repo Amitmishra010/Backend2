@@ -3,8 +3,9 @@ import VideoCard from "../components/VideoCard"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { Link } from "react-router-dom"
-function Home() {
 
+function Home() {
+  const API=import.meta.env.VITE_BACKEND_URL
   const [videos, setVideos] = useState([])
 
   useEffect(() => {
@@ -13,7 +14,7 @@ function Home() {
       try {
 
         const res = await axios.get(
-          "http://localhost:8000/api/v1/videos/"
+          `${API}/videos`
         )
 
         setVideos(res.data.data)

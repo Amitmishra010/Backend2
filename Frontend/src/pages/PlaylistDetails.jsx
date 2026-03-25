@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const PlaylistDetail = () => {
+  const API=import.meta.env.VITE_BACKEND_URL
   const { playlistId } = useParams();
   const [playlist, setPlaylist] = useState(null);
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const PlaylistDetail = () => {
   const fetchPlaylist = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/playlists/${playlistId}`
+        `${API}/playlists/${playlistId}`
       );
 
       setPlaylist(res.data.data[0]); // because aggregation returns array
