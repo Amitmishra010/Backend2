@@ -25,7 +25,7 @@ const [coverimage,setcoverimage]=useState(null)
     try {
 
       const res = await axios.post(
-        "${API}/users/register",
+        `${API}/users/register`,
         formData,
         {
           headers: {
